@@ -10,4 +10,12 @@
     <Folder Include="Configuration\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PersonsManager.DTO\PersonsManager.DTO.csproj" />
+  </ItemGroup>
+
 </Project>

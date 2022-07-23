@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace PersonsManager.DTO.Client
 {
-    internal class ClientDto
+    public class ClientDto
     {
+        public Guid Id { get; set; }
+        public string PhoneNumber { get; set; }
+        public Guid UserId { get; set; }
+        public bool IsBanned { get; set; }
     }
 }

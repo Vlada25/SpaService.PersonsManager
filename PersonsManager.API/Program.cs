@@ -1,5 +1,7 @@
+using AutoMapper;
 using Microsoft.AspNetCore.HttpOverrides;
 using PersonsManager.API.Extensions;
+using PersonsManager.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 

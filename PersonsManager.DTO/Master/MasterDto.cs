@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace PersonsManager.DTO.Master
 {
-    internal class MasterDto
+    public class MasterDto
     {
+        public Guid Id { get; set; }
+        public string PhoneNumber { get; set; }
+        public Guid UserId { get; set; }
+        public int Rating { get; set; }
     }
 }
