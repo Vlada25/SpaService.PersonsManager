@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PersonsManager.Database;
+using PersonsManager.Interfaces;
 
 namespace PersonsManager.API.Extensions
 {
@@ -26,11 +27,9 @@ namespace PersonsManager.API.Extensions
                 opts.UseSqlServer(configuration.GetConnectionString("sqlConnection"), b =>
                     b.MigrationsAssembly("PersonsManager.Database")));
         }
-
-        /*
         public static void ConfigureRepositoryManager(this IServiceCollection services)
         {
             services.AddScoped<IRepositoryManager, RepositoryManager>();
-        }*/
+        }
     }
 }
