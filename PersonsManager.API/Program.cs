@@ -9,6 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.ConfigureRepositoryManager();
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(5051);
+    options.ListenAnyIP(7051, configure => configure.UseHttps());
+});
+
 builder.Services.AddControllers(config =>
 {
     config.RespectBrowserAcceptHeader = true;

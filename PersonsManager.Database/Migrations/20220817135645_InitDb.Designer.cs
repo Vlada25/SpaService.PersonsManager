@@ -12,8 +12,8 @@ using PersonsManager.Database;
 namespace PersonsManager.Database.Migrations
 {
     [DbContext(typeof(PersonsManagerDbContext))]
-    [Migration("20220723143700_InitPersonsDb")]
-    partial class InitPersonsDb
+    [Migration("20220817135645_InitDb")]
+    partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -51,9 +51,6 @@ namespace PersonsManager.Database.Migrations
             modelBuilder.Entity("PersonsManager.Domain.Models.Client", b =>
                 {
                     b.HasBaseType("PersonsManager.Domain.Models.Person");
-
-                    b.Property<bool>("IsBanned")
-                        .HasColumnType("bit");
 
                     b.HasDiscriminator().HasValue("Client");
                 });

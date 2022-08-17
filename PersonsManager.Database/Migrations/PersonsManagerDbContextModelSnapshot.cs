@@ -50,9 +50,6 @@ namespace PersonsManager.Database.Migrations
                 {
                     b.HasBaseType("PersonsManager.Domain.Models.Person");
 
-                    b.Property<bool>("IsBanned")
-                        .HasColumnType("bit");
-
                     b.HasDiscriminator().HasValue("Client");
                 });
 

@@ -11,6 +11,5 @@ namespace PersonsManager.DTO.Client
         public Guid Id { get; set; }
         public string PhoneNumber { get; set; }
         public Guid UserId { get; set; }
-        public bool IsBanned { get; set; }
     }
 }

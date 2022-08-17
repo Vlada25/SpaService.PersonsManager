@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PersonsManager.Database.Migrations
 {
-    public partial class InitPersonsDb : Migration
+    public partial class InitDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,7 +17,6 @@ namespace PersonsManager.Database.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsBanned = table.Column<bool>(type: "bit", nullable: true),
                     Rating = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
