@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PersonsManager.API.Services;
 using PersonsManager.Database;
 using PersonsManager.Interfaces;
+using PersonsManager.Interfaces.Services;
 
 namespace PersonsManager.API.Extensions
 {
@@ -30,6 +32,9 @@ namespace PersonsManager.API.Extensions
         public static void ConfigureRepositoryManager(this IServiceCollection services)
         {
             services.AddScoped<IRepositoryManager, RepositoryManager>();
+
+            services.AddScoped<IClientsService, ClientsService>();
+            services.AddScoped<IMastersService, MastersService>();
         }
     }
 }

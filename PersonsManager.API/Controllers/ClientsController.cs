@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PersonsManager.Domain.Models;
 using PersonsManager.DTO.Client;
 using PersonsManager.Interfaces;
+using PersonsManager.Interfaces.Services;
 
 namespace PersonsManager.API.Controllers
 {
@@ -10,20 +11,19 @@ namespace PersonsManager.API.Controllers
     [ApiController]
     public class ClientsController : ControllerBase
     {
-        private readonly IRepositoryManager _repository;
-        private readonly IMapper _mapper;
+        private readonly IClientsService _clientsService;
 
-        public ClientsController(IRepositoryManager repositoryManager, IMapper mapper)
+        public ClientsController(IClientsService clientsService)
         {
-            _repository = repositoryManager;
-            _mapper = mapper;
+            _clientsService = clientsService;
         }
 
+        #region CRUD
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            var clients = _repository.ClientsRepository.GetAll(trackChanges: false);
+            var clients = _clientsService.GetAll();
 
             return Ok(clients);
         }
@@ -31,7 +31,7 @@ namespace PersonsManager.API.Controllers
         [HttpGet("{id}", Name = "ClientById")]
         public IActionResult Get(Guid id)
         {
-            var client = _repository.ClientsRepository.GetById(id, trackChanges: false);
+            var client = _clientsService.GetById(id);
 
             if (client == null)
             {
@@ -51,10 +51,7 @@ namespace PersonsManager.API.Controllers
                 return BadRequest("Object sent from client is null");
             }
 
-            var clientEntity = _mapper.Map<Client>(client);
-
-            _repository.ClientsRepository.Create(clientEntity);
-            _repository.Save();
+            var clientEntity = _clientsService.Create(client);
 
             return CreatedAtRoute("ClientById", new { id = clientEntity.Id }, clientEntity);
         }
@@ -67,33 +64,44 @@ namespace PersonsManager.API.Controllers
                 return BadRequest("Object sent from client is null");
             }
 
-            var clientEntity = _repository.ClientsRepository.GetById(client.Id, trackChanges: true);
+            var isEntityFound = _clientsService.Update(client);
 
-            if (clientEntity == null)
+            if (!isEntityFound)
             {
                 return NotFound($"Entity with id: {client.Id} doesn't exist in datebase");
             }
 
-            _mapper.Map(client, clientEntity);
-            _repository.Save();
-
-            return Ok("Entity was updated");
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {
-            var client = _repository.ClientsRepository.GetById(id, trackChanges: false);
+            var isEntityFound = _clientsService.Delete(id);
 
-            if (client == null)
+            if (!isEntityFound)
             {
                 return NotFound($"Entity with id: {id} doesn't exist in the database.");
             }
 
-            _repository.ClientsRepository.Delete(client);
-            _repository.Save();
+            return NoContent();
+        }
 
-            return Ok("Entity was deleted");
+        #endregion
+
+        [HttpGet("{userId}")]
+        public IActionResult GetByUserId(Guid userId)
+        {
+            var client = _clientsService.GetByUserId(userId);
+
+            if (client == null)
+            {
+                return NotFound($"Entity with userId: {userId} doesn't exist in datebase");
+            }
+            else
+            {
+                return Ok(client);
+            }
         }
     }
 }

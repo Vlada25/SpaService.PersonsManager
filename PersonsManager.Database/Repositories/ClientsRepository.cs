@@ -18,8 +18,11 @@ namespace PersonsManager.Database.Repositories
         public IEnumerable<Client> GetAll(bool trackChanges) =>
             GetAllEntities(trackChanges);
 
+        public Client GetByUserId(Guid userId) =>
+            GetByCondition(c => c.UserId.Equals(userId), false).SingleOrDefault();
+
         public Client GetById(Guid id, bool trackChanges) =>
-            GetByCondition(fm => fm.Id.Equals(id), trackChanges).SingleOrDefault();
+            GetByCondition(c => c.Id.Equals(id), trackChanges).SingleOrDefault();
 
         public void Delete(Client entity) => DeleteEntity(entity);
     }

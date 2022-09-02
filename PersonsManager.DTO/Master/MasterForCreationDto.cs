@@ -10,6 +10,5 @@ namespace PersonsManager.DTO.Master
     {
         public string PhoneNumber { get; set; }
         public Guid UserId { get; set; }
-        public int Rating { get; set; }
     }
 }

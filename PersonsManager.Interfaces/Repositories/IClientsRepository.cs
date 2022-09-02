@@ -11,6 +11,7 @@ namespace PersonsManager.Interfaces.Repositories
     {
         IEnumerable<Client> GetAll(bool trackChanges);
         Client GetById(Guid id, bool trackChanges);
+        Client GetByUserId(Guid userId);
         void Create(Client entity);
         void Delete(Client entity);
     }

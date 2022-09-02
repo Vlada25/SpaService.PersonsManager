@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PersonsManager.Domain.Models;
 using PersonsManager.DTO.Master;
 using PersonsManager.Interfaces;
+using PersonsManager.Interfaces.Services;
 
 namespace PersonsManager.API.Controllers
 {
@@ -11,20 +12,18 @@ namespace PersonsManager.API.Controllers
     [ApiController]
     public class MastersController : ControllerBase
     {
-        private readonly IRepositoryManager _repository;
-        private readonly IMapper _mapper;
+        private readonly IMastersService _mastersService;
 
-        public MastersController(IRepositoryManager repositoryManager, IMapper mapper)
+        public MastersController(IMastersService mastersService)
         {
-            _repository = repositoryManager;
-            _mapper = mapper;
+            _mastersService = mastersService;
         }
 
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            var masters = _repository.MastersRepository.GetAll(trackChanges: false);
+            var masters = _mastersService.GetAll();
 
             return Ok(masters);
         }
@@ -32,7 +31,7 @@ namespace PersonsManager.API.Controllers
         [HttpGet("{id}", Name = "MasterById")]
         public IActionResult Get(Guid id)
         {
-            var master = _repository.MastersRepository.GetById(id, trackChanges: false);
+            var master = _mastersService.GetById(id);
 
             if (master == null)
             {
@@ -52,10 +51,7 @@ namespace PersonsManager.API.Controllers
                 return BadRequest("Object sent from client is null");
             }
 
-            var masterEntity = _mapper.Map<Master>(master);
-
-            _repository.MastersRepository.Create(masterEntity);
-            _repository.Save();
+            var masterEntity = _mastersService.Create(master);
 
             return CreatedAtRoute("MasterById", new { id = masterEntity.Id }, masterEntity);
         }
@@ -68,33 +64,27 @@ namespace PersonsManager.API.Controllers
                 return BadRequest("Object sent from client is null");
             }
 
-            var masterEntity = _repository.MastersRepository.GetById(master.Id, trackChanges: true);
+            var isEntityFound = _mastersService.Update(master);
 
-            if (masterEntity == null)
+            if (!isEntityFound)
             {
                 return NotFound($"Entity with id: {master.Id} doesn't exist in datebase");
             }
 
-            _mapper.Map(master, masterEntity);
-            _repository.Save();
-
-            return Ok("Entity was updated");
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {
-            var master = _repository.MastersRepository.GetById(id, trackChanges: false);
+            var isEntityFound = _mastersService.Delete(id);
 
-            if (master == null)
+            if (!isEntityFound)
             {
                 return NotFound($"Entity with id: {id} doesn't exist in the database.");
             }
 
-            _repository.MastersRepository.Delete(master);
-            _repository.Save();
-
-            return Ok("Entity was deleted");
+            return NoContent();
         }
     }
 }
