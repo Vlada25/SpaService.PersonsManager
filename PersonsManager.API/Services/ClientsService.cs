@@ -43,6 +43,21 @@ namespace PersonsManager.API.Services
             return true;
         }
 
+        public bool DeleteByUserId(Guid userId)
+        {
+            var entity = _repositoryManager.ClientsRepository.GetByUserId(userId);
+
+            if (entity == null)
+            {
+                return false;
+            }
+
+            _repositoryManager.ClientsRepository.Delete(entity);
+            _repositoryManager.Save();
+
+            return true;
+        }
+
         public IEnumerable<Client> GetAll() =>
             _repositoryManager.ClientsRepository.GetAll(trackChanges: false);
 

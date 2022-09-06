@@ -12,8 +12,8 @@ using PersonsManager.Database;
 namespace PersonsManager.Database.Migrations
 {
     [DbContext(typeof(PersonsManagerDbContext))]
-    [Migration("20220817135645_InitDb")]
-    partial class InitDb
+    [Migration("20220906054437_InitDatabase")]
+    partial class InitDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,7 +34,19 @@ namespace PersonsManager.Database.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MiddleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -51,6 +63,9 @@ namespace PersonsManager.Database.Migrations
             modelBuilder.Entity("PersonsManager.Domain.Models.Client", b =>
                 {
                     b.HasBaseType("PersonsManager.Domain.Models.Person");
+
+                    b.Property<bool>("IsBanned")
+                        .HasColumnType("bit");
 
                     b.HasDiscriminator().HasValue("Client");
                 });

@@ -21,6 +21,9 @@ namespace PersonsManager.Database.Repositories
         public Master GetById(Guid id, bool trackChanges) =>
             GetByCondition(fm => fm.Id.Equals(id), trackChanges).SingleOrDefault();
 
+        public Master GetByUserId(Guid userId) =>
+            GetByCondition(c => c.UserId.Equals(userId), false).SingleOrDefault();
+
         public void Delete(Master entity) => DeleteEntity(entity);
     }
 }

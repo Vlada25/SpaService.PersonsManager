@@ -32,7 +32,19 @@ namespace PersonsManager.Database.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MiddleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -49,6 +61,9 @@ namespace PersonsManager.Database.Migrations
             modelBuilder.Entity("PersonsManager.Domain.Models.Client", b =>
                 {
                     b.HasBaseType("PersonsManager.Domain.Models.Person");
+
+                    b.Property<bool>("IsBanned")
+                        .HasColumnType("bit");
 
                     b.HasDiscriminator().HasValue("Client");
                 });

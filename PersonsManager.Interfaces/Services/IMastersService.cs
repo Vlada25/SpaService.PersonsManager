@@ -12,8 +12,10 @@ namespace PersonsManager.Interfaces.Services
     {
         IEnumerable<Master> GetAll();
         Master GetById(Guid id);
+        Master GetByUserId(Guid userId);
         Master Create(MasterForCreationDto entityForCreation);
         bool Delete(Guid id);
+        bool DeleteByUserId(Guid userId);
         bool Update(MasterForUpdateDto entityForUpdate);
     }
 }

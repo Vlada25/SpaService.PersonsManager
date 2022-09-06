@@ -103,5 +103,18 @@ namespace PersonsManager.API.Controllers
                 return Ok(client);
             }
         }
+
+        [HttpDelete("{userId}")]
+        public IActionResult DeleteByUserId(Guid userId)
+        {
+            var isEntityFound = _clientsService.DeleteByUserId(userId);
+
+            if (!isEntityFound)
+            {
+                return NotFound($"Entity with userId: {userId} doesn't exist in the database.");
+            }
+
+            return NoContent();
+        }
     }
 }

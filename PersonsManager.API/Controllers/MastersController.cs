@@ -19,6 +19,7 @@ namespace PersonsManager.API.Controllers
             _mastersService = mastersService;
         }
 
+        #region CRUD
 
         [HttpGet]
         public IActionResult GetAll()
@@ -48,7 +49,7 @@ namespace PersonsManager.API.Controllers
         {
             if (master == null)
             {
-                return BadRequest("Object sent from client is null");
+                return BadRequest("Object sent from user is null");
             }
 
             var masterEntity = _mastersService.Create(master);
@@ -61,7 +62,7 @@ namespace PersonsManager.API.Controllers
         {
             if (master == null)
             {
-                return BadRequest("Object sent from client is null");
+                return BadRequest("Object sent from user is null");
             }
 
             var isEntityFound = _mastersService.Update(master);
@@ -82,6 +83,37 @@ namespace PersonsManager.API.Controllers
             if (!isEntityFound)
             {
                 return NotFound($"Entity with id: {id} doesn't exist in the database.");
+            }
+
+            return NoContent();
+        }
+
+        #endregion
+
+
+        [HttpGet("{userId}")]
+        public IActionResult GetByUserId(Guid userId)
+        {
+            var master = _mastersService.GetByUserId(userId);
+
+            if (master == null)
+            {
+                return NotFound($"Entity with userId: {userId} doesn't exist in datebase");
+            }
+            else
+            {
+                return Ok(master);
+            }
+        }
+
+        [HttpDelete("{userId}")]
+        public IActionResult DeleteByUserId(Guid userId)
+        {
+            var isEntityFound = _mastersService.DeleteByUserId(userId);
+
+            if (!isEntityFound)
+            {
+                return NotFound($"Entity with userId: {userId} doesn't exist in the database.");
             }
 
             return NoContent();

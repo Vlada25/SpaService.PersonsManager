@@ -43,11 +43,29 @@ namespace PersonsManager.API.Services
             return true;
         }
 
+        public bool DeleteByUserId(Guid userId)
+        {
+            var entity = _repositoryManager.MastersRepository.GetByUserId(userId);
+
+            if (entity == null)
+            {
+                return false;
+            }
+
+            _repositoryManager.MastersRepository.Delete(entity);
+            _repositoryManager.Save();
+
+            return true;
+        }
+
         public IEnumerable<Master> GetAll() =>
             _repositoryManager.MastersRepository.GetAll(trackChanges: false);
 
         public Master GetById(Guid id) =>
             _repositoryManager.MastersRepository.GetById(id, trackChanges: false);
+
+        public Master GetByUserId(Guid userId) =>
+            _repositoryManager.MastersRepository.GetByUserId(userId);
 
         public bool Update(MasterForUpdateDto entityForUpdate)
         {
