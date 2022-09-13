@@ -4,6 +4,7 @@ using PersonsManager.API.Services;
 using PersonsManager.Database;
 using PersonsManager.Interfaces;
 using PersonsManager.Interfaces.Services;
+using PersonsManager.Messaging.Consumers;
 using PersonsManager.Messaging.Senders;
 using SpaService.Domain.Configuration;
 
@@ -53,6 +54,11 @@ namespace PersonsManager.API.Extensions
 
             services.AddMassTransit(x =>
             {
+                x.AddConsumer<UserClientCreatedConsumer>();
+                x.AddConsumer<UserClientDeletedConsumer>();
+                x.AddConsumer<UserMasterCreatedConsumer>();
+                x.AddConsumer<UserMasterDeletedConsumer>();
+
                 x.UsingRabbitMq((context, cfg) =>
                 {
                     cfg.Host(messagingConfig["Hostname"], "/", h =>

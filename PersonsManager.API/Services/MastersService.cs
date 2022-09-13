@@ -52,7 +52,7 @@ namespace PersonsManager.API.Services
             return true;
         }
 
-        public bool DeleteByUserId(Guid userId)
+        public async Task<bool> DeleteByUserId(Guid userId)
         {
             var entity = _repositoryManager.MastersRepository.GetByUserId(userId);
 
@@ -63,6 +63,8 @@ namespace PersonsManager.API.Services
 
             _repositoryManager.MastersRepository.Delete(entity);
             _repositoryManager.Save();
+
+            await _masterDeletedSender.SendMessage(entity);
 
             return true;
         }

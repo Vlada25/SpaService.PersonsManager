@@ -102,9 +102,9 @@ namespace PersonsManager.API.Controllers
         }
 
         [HttpDelete("{userId}")]
-        public IActionResult DeleteByUserId(Guid userId)
+        public async Task<IActionResult> DeleteByUserId(Guid userId)
         {
-            var isEntityFound = _clientsService.DeleteByUserId(userId);
+            var isEntityFound = await _clientsService.DeleteByUserId(userId);
 
             if (!isEntityFound)
             {

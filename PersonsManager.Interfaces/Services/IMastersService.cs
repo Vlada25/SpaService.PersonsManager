@@ -10,7 +10,7 @@ namespace PersonsManager.Interfaces.Services
         Master GetByUserId(Guid userId);
         Master Create(MasterForCreationDto entityForCreation);
         Task<bool> Delete(Guid id);
-        bool DeleteByUserId(Guid userId);
+        Task<bool> DeleteByUserId(Guid userId);
         Task<bool> Update(MasterForUpdateDto entityForUpdate);
     }
 }
