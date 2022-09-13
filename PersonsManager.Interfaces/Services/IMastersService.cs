@@ -1,10 +1,5 @@
 ﻿using PersonsManager.Domain.Models;
 using PersonsManager.DTO.Master;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PersonsManager.Interfaces.Services
 {
@@ -14,8 +9,8 @@ namespace PersonsManager.Interfaces.Services
         Master GetById(Guid id);
         Master GetByUserId(Guid userId);
         Master Create(MasterForCreationDto entityForCreation);
-        bool Delete(Guid id);
+        Task<bool> Delete(Guid id);
         bool DeleteByUserId(Guid userId);
-        bool Update(MasterForUpdateDto entityForUpdate);
+        Task<bool> Update(MasterForUpdateDto entityForUpdate);
     }
 }

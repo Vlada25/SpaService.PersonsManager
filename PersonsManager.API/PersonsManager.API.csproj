@@ -15,12 +15,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="SpaService.Domain" Version="1.0.1" />
+    <PackageReference Include="SpaService.Domain" Version="1.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\PersonsManager.Database\PersonsManager.Database.csproj" />
+    <ProjectReference Include="..\PersonsManager.Messaging\PersonsManager.Messaging.csproj" />
   </ItemGroup>
 
 </Project>

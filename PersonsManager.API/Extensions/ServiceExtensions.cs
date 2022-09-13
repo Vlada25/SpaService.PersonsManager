@@ -4,6 +4,8 @@ using PersonsManager.API.Services;
 using PersonsManager.Database;
 using PersonsManager.Interfaces;
 using PersonsManager.Interfaces.Services;
+using PersonsManager.Messaging.Senders;
+using SpaService.Domain.Configuration;
 
 namespace PersonsManager.API.Extensions
 {
@@ -36,21 +38,27 @@ namespace PersonsManager.API.Extensions
 
             services.AddScoped<IClientsService, ClientsService>();
             services.AddScoped<IMastersService, MastersService>();
+
+            services.AddScoped<ClientDeletedSender>();
+            services.AddScoped<ClientUpdatedSender>();
+            services.AddScoped<MasterDeletedSender>();
+            services.AddScoped<MasterUpdatedSender>();
         }
 
         public static void ConfigureMessageBroker(this IServiceCollection services,
             IConfiguration configuration)
         {
-            //var messagingConfig = configuration.GetSection("Messaging");
-            //services.Configure<MessagingConfig>(messagingConfig);
+            var messagingConfig = configuration.GetSection("Messaging");
+            services.Configure<MessagingConfig>(messagingConfig);
 
             services.AddMassTransit(x =>
             {
                 x.UsingRabbitMq((context, cfg) =>
                 {
-                    cfg.Host("localhost", "/", h => {
-                        h.Username("guest");
-                        h.Password("guest");
+                    cfg.Host(messagingConfig["Hostname"], "/", h =>
+                    {
+                        h.Username(messagingConfig["UserName"]);
+                        h.Password(messagingConfig["Password"]);
                     });
 
                     cfg.ConfigureEndpoints(context);

@@ -1,11 +1,6 @@
 ﻿using PersonsManager.Database.Repositories;
 using PersonsManager.Interfaces;
 using PersonsManager.Interfaces.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PersonsManager.Database
 {

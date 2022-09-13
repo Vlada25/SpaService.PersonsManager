@@ -3,6 +3,7 @@ using PersonsManager.Domain.Models;
 using PersonsManager.DTO.Client;
 using PersonsManager.Interfaces;
 using PersonsManager.Interfaces.Services;
+using PersonsManager.Messaging.Senders;
 
 namespace PersonsManager.API.Services
 {
@@ -10,12 +11,18 @@ namespace PersonsManager.API.Services
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
+        private readonly ClientDeletedSender _clientDeletedSender;
+        private readonly ClientUpdatedSender _clientUpdatedSender;
 
         public ClientsService(IRepositoryManager repositoryManager,
-            IMapper mapper)
+            IMapper mapper,
+            ClientDeletedSender clientDeletedSender,
+            ClientUpdatedSender clientUpdatedSender)
         {
             _repositoryManager = repositoryManager;
             _mapper = mapper;
+            _clientDeletedSender = clientDeletedSender;
+            _clientUpdatedSender = clientUpdatedSender;
         }
 
         public Client Create(ClientForCreationDto entityForCreation)
@@ -28,7 +35,7 @@ namespace PersonsManager.API.Services
             return entity;
         }
 
-        public bool Delete(Guid id)
+        public async Task<bool> Delete(Guid id)
         {
             var entity = _repositoryManager.ClientsRepository.GetById(id, trackChanges: false);
 
@@ -39,6 +46,8 @@ namespace PersonsManager.API.Services
 
             _repositoryManager.ClientsRepository.Delete(entity);
             _repositoryManager.Save();
+
+            await _clientDeletedSender.SendMessage(entity);
 
             return true;
         }
@@ -67,7 +76,7 @@ namespace PersonsManager.API.Services
         public Client GetByUserId(Guid userId) =>
             _repositoryManager.ClientsRepository.GetByUserId(userId);
 
-        public bool Update(ClientForUpdateDto entityForUpdate)
+        public async Task<bool> Update(ClientForUpdateDto entityForUpdate)
         {
             var entity = _repositoryManager.ClientsRepository.GetById(entityForUpdate.Id, trackChanges: true);
 
@@ -78,6 +87,8 @@ namespace PersonsManager.API.Services
 
             _mapper.Map(entityForUpdate, entity);
             _repositoryManager.Save();
+
+            await _clientUpdatedSender.SendMessage(entity);
 
             return true;
         }

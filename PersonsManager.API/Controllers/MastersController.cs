@@ -1,9 +1,5 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using PersonsManager.Domain.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using PersonsManager.DTO.Master;
-using PersonsManager.Interfaces;
 using PersonsManager.Interfaces.Services;
 
 namespace PersonsManager.API.Controllers
@@ -58,14 +54,14 @@ namespace PersonsManager.API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] MasterForUpdateDto master)
+        public async Task<IActionResult> Update([FromBody] MasterForUpdateDto master)
         {
             if (master == null)
             {
                 return BadRequest("Object sent from user is null");
             }
 
-            var isEntityFound = _mastersService.Update(master);
+            var isEntityFound = await _mastersService.Update(master);
 
             if (!isEntityFound)
             {
@@ -76,9 +72,9 @@ namespace PersonsManager.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var isEntityFound = _mastersService.Delete(id);
+            var isEntityFound = await _mastersService.Delete(id);
 
             if (!isEntityFound)
             {
