@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using PersonsManager.API.Services;
 using PersonsManager.Database;
 using PersonsManager.Interfaces;
@@ -35,6 +36,26 @@ namespace PersonsManager.API.Extensions
 
             services.AddScoped<IClientsService, ClientsService>();
             services.AddScoped<IMastersService, MastersService>();
+        }
+
+        public static void ConfigureMessageBroker(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            //var messagingConfig = configuration.GetSection("Messaging");
+            //services.Configure<MessagingConfig>(messagingConfig);
+
+            services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("localhost", "/", h => {
+                        h.Username("guest");
+                        h.Password("guest");
+                    });
+
+                    cfg.ConfigureEndpoints(context);
+                });
+            });
         }
     }
 }

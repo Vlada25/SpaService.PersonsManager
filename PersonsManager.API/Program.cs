@@ -21,6 +21,8 @@ builder.Services.AddControllers(config =>
     config.ReturnHttpNotAcceptable = true;
 }).AddNewtonsoftJson();
 
+builder.Services.ConfigureMessageBroker(builder.Configuration);
+
 builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
 
