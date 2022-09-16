@@ -18,17 +18,17 @@ namespace PersonsManager.API.Controllers
         #region CRUD
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var masters = _mastersService.GetAll();
+            var masters = await _mastersService.GetAll();
 
             return Ok(masters);
         }
 
         [HttpGet("{id}", Name = "MasterById")]
-        public IActionResult Get(Guid id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            var master = _mastersService.GetById(id);
+            var master = await _mastersService.GetById(id);
 
             if (master == null)
             {
@@ -41,14 +41,14 @@ namespace PersonsManager.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] MasterForCreationDto master)
+        public async Task<IActionResult> Create([FromBody] MasterForCreationDto master)
         {
             if (master == null)
             {
                 return BadRequest("Object sent from user is null");
             }
 
-            var masterEntity = _mastersService.Create(master);
+            var masterEntity = await _mastersService.Create(master);
 
             return CreatedAtRoute("MasterById", new { id = masterEntity.Id }, masterEntity);
         }
@@ -88,9 +88,9 @@ namespace PersonsManager.API.Controllers
 
 
         [HttpGet("{userId}")]
-        public IActionResult GetByUserId(Guid userId)
+        public async Task<IActionResult> GetByUserId(Guid userId)
         {
-            var master = _mastersService.GetByUserId(userId);
+            var master = await _mastersService.GetByUserId(userId);
 
             if (master == null)
             {

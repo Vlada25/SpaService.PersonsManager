@@ -40,6 +40,6 @@ namespace PersonsManager.Database
             }
         }
 
-        public void Save() => _dbContext.SaveChanges();
+        public async Task Save() => await _dbContext.SaveChangesAsync();
     }
 }

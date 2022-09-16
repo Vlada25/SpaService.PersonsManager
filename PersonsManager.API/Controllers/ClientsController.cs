@@ -18,17 +18,17 @@ namespace PersonsManager.API.Controllers
         #region CRUD
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var clients = _clientsService.GetAll();
+            var clients = await _clientsService.GetAll();
 
             return Ok(clients);
         }
 
         [HttpGet("{id}", Name = "ClientById")]
-        public IActionResult Get(Guid id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            var client = _clientsService.GetById(id);
+            var client = await _clientsService.GetById(id);
 
             if (client == null)
             {
@@ -41,14 +41,14 @@ namespace PersonsManager.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] ClientForCreationDto client)
+        public async Task<IActionResult> Create([FromBody] ClientForCreationDto client)
         {
             if (client == null)
             {
                 return BadRequest("Object sent from client is null");
             }
 
-            var clientEntity = _clientsService.Create(client);
+            var clientEntity = await _clientsService.Create(client);
 
             return CreatedAtRoute("ClientById", new { id = clientEntity.Id }, clientEntity);
         }
@@ -87,9 +87,9 @@ namespace PersonsManager.API.Controllers
         #endregion
 
         [HttpGet("{userId}")]
-        public IActionResult GetByUserId(Guid userId)
+        public async Task<IActionResult> GetByUserId(Guid userId)
         {
-            var client = _clientsService.GetByUserId(userId);
+            var client = await _clientsService.GetByUserId(userId);
 
             if (client == null)
             {

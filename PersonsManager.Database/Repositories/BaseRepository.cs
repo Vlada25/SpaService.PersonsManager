@@ -13,9 +13,9 @@ namespace PersonsManager.Database.Repositories
             this.dbContext = dbContext;
         }
 
-        public void CreateEntity(T entity)
+        public async Task CreateEntity(T entity)
         {
-            dbContext.Set<T>().Add(entity);
+            await dbContext.Set<T>().AddAsync(entity);
         }
 
         public void DeleteEntity(T entity)

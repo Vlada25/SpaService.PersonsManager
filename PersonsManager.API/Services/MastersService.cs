@@ -25,19 +25,19 @@ namespace PersonsManager.API.Services
             _masterUpdatedSender = masterUpdatedSender;
         }
 
-        public Master Create(MasterForCreationDto entityForCreation)
+        public async Task<Master> Create(MasterForCreationDto entityForCreation)
         {
             var entity = _mapper.Map<Master>(entityForCreation);
 
-            _repositoryManager.MastersRepository.Create(entity);
-            _repositoryManager.Save();
+            await _repositoryManager.MastersRepository.Create(entity);
+            await _repositoryManager.Save();
 
             return entity;
         }
 
         public async Task<bool> Delete(Guid id)
         {
-            var entity = _repositoryManager.MastersRepository.GetById(id, trackChanges: false);
+            var entity = await _repositoryManager.MastersRepository.GetById(id, trackChanges: false);
 
             if (entity == null)
             {
@@ -45,7 +45,7 @@ namespace PersonsManager.API.Services
             }
 
             _repositoryManager.MastersRepository.Delete(entity);
-            _repositoryManager.Save();
+            await _repositoryManager.Save();
 
             await _masterDeletedSender.SendMessage(entity);
 
@@ -54,7 +54,7 @@ namespace PersonsManager.API.Services
 
         public async Task<bool> DeleteByUserId(Guid userId)
         {
-            var entity = _repositoryManager.MastersRepository.GetByUserId(userId);
+            var entity = await _repositoryManager.MastersRepository.GetByUserId(userId);
 
             if (entity == null)
             {
@@ -62,25 +62,25 @@ namespace PersonsManager.API.Services
             }
 
             _repositoryManager.MastersRepository.Delete(entity);
-            _repositoryManager.Save();
+            await _repositoryManager.Save();
 
             await _masterDeletedSender.SendMessage(entity);
 
             return true;
         }
 
-        public IEnumerable<Master> GetAll() =>
-            _repositoryManager.MastersRepository.GetAll(trackChanges: false);
+        public async Task<IEnumerable<Master>> GetAll() =>
+            await _repositoryManager.MastersRepository.GetAll(trackChanges: false);
 
-        public Master GetById(Guid id) =>
-            _repositoryManager.MastersRepository.GetById(id, trackChanges: false);
+        public async Task<Master> GetById(Guid id) =>
+            await _repositoryManager.MastersRepository.GetById(id, trackChanges: false);
 
-        public Master GetByUserId(Guid userId) =>
-            _repositoryManager.MastersRepository.GetByUserId(userId);
+        public async Task<Master> GetByUserId(Guid userId) =>
+            await _repositoryManager.MastersRepository.GetByUserId(userId);
 
         public async Task<bool> Update(MasterForUpdateDto entityForUpdate)
         {
-            var entity = _repositoryManager.MastersRepository.GetById(entityForUpdate.Id, trackChanges: true);
+            var entity = await _repositoryManager.MastersRepository.GetById(entityForUpdate.Id, trackChanges: true);
 
             if (entity == null)
             {
@@ -88,7 +88,7 @@ namespace PersonsManager.API.Services
             }
 
             _mapper.Map(entityForUpdate, entity);
-            _repositoryManager.Save();
+            await _repositoryManager.Save();
 
             await _masterUpdatedSender.SendMessage(entity);
 

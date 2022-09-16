@@ -7,6 +7,6 @@ namespace PersonsManager.Interfaces
         IClientsRepository ClientsRepository { get; }
         IMastersRepository MastersRepository { get; }
 
-        void Save();
+        Task Save();
     }
 }

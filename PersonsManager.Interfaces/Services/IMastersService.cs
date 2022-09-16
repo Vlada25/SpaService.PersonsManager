@@ -5,10 +5,10 @@ namespace PersonsManager.Interfaces.Services
 {
     public interface IMastersService
     {
-        IEnumerable<Master> GetAll();
-        Master GetById(Guid id);
-        Master GetByUserId(Guid userId);
-        Master Create(MasterForCreationDto entityForCreation);
+        Task<IEnumerable<Master>> GetAll();
+        Task<Master> GetById(Guid id);
+        Task<Master> GetByUserId(Guid userId);
+        Task<Master> Create(MasterForCreationDto entityForCreation);
         Task<bool> Delete(Guid id);
         Task<bool> DeleteByUserId(Guid userId);
         Task<bool> Update(MasterForUpdateDto entityForUpdate);
