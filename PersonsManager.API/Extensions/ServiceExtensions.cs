@@ -49,26 +49,12 @@ namespace PersonsManager.API.Extensions
         public static void ConfigureMessageBroker(this IServiceCollection services,
             IConfiguration configuration)
         {
-            var messagingConfig = configuration.GetSection("Messaging");
-            services.Configure<MessagingConfig>(messagingConfig);
-
-            services.AddMassTransit(x =>
-            {
-                x.AddConsumer<UserClientCreatedConsumer>();
-                x.AddConsumer<UserClientDeletedConsumer>();
-                x.AddConsumer<UserMasterCreatedConsumer>();
-                x.AddConsumer<UserMasterDeletedConsumer>();
-
-                x.UsingRabbitMq((context, cfg) =>
-                {
-                    cfg.Host(messagingConfig["Hostname"], "/", h =>
-                    {
-                        h.Username(messagingConfig["UserName"]);
-                        h.Password(messagingConfig["Password"]);
-                    });
-
-                    cfg.ConfigureEndpoints(context);
-                });
+            services.ConfigureMessageBroker(configuration, consumersConfig => 
+            { 
+                consumersConfig.AddConsumer<UserClientCreatedConsumer>();
+                consumersConfig.AddConsumer<UserClientDeletedConsumer>();
+                consumersConfig.AddConsumer<UserMasterCreatedConsumer>();
+                consumersConfig.AddConsumer<UserMasterDeletedConsumer>();
             });
         }
     }
