@@ -23,7 +23,7 @@ namespace PersonsManager.Messaging.Consumers
         {
             var message = context.Message;
 
-            _clientsService.Create(new ClientForCreationDto
+            await _clientsService.Create(new ClientForCreationDto
             {
                 Surname = message.Surname,
                 Name = message.Name,

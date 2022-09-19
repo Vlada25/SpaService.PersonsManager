@@ -22,7 +22,7 @@ namespace PersonsManager.Messaging.Consumers
         {
             var message = context.Message;
 
-            _clientsService.DeleteByUserId(message.Id);
+            await _clientsService.DeleteByUserId(message.Id);
         }
     }
 }
