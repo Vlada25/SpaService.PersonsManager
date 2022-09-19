@@ -11,18 +11,15 @@ namespace PersonsManager.API.Services
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
-        private readonly ClientDeletedSender _clientDeletedSender;
-        private readonly ClientUpdatedSender _clientUpdatedSender;
+        private readonly ClientChangedSender _clientChangedSender;
 
         public ClientsService(IRepositoryManager repositoryManager,
             IMapper mapper,
-            ClientDeletedSender clientDeletedSender,
-            ClientUpdatedSender clientUpdatedSender)
+            ClientChangedSender clientDeletedSender)
         {
             _repositoryManager = repositoryManager;
             _mapper = mapper;
-            _clientDeletedSender = clientDeletedSender;
-            _clientUpdatedSender = clientUpdatedSender;
+            _clientChangedSender = clientDeletedSender;
         }
 
         public async Task<Client> Create(ClientForCreationDto entityForCreation)
@@ -47,7 +44,7 @@ namespace PersonsManager.API.Services
             _repositoryManager.ClientsRepository.Delete(entity);
             await _repositoryManager.Save();
 
-            await _clientDeletedSender.SendMessage(entity);
+            await _clientChangedSender.SendDeletedMessage(entity);
 
             return true;
         }
@@ -64,7 +61,7 @@ namespace PersonsManager.API.Services
             _repositoryManager.ClientsRepository.Delete(entity);
             await _repositoryManager.Save();
 
-            await _clientDeletedSender.SendMessage(entity);
+            await _clientChangedSender.SendDeletedMessage(entity);
 
             return true;
         }
@@ -92,7 +89,7 @@ namespace PersonsManager.API.Services
             _repositoryManager.ClientsRepository.Update(entity);
             await _repositoryManager.Save();
 
-            await _clientUpdatedSender.SendMessage(entity);
+            await _clientChangedSender.SendUpdatedMessage(entity);
 
             return true;
         }

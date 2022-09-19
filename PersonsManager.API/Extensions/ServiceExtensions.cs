@@ -40,10 +40,8 @@ namespace PersonsManager.API.Extensions
             services.AddScoped<IClientsService, ClientsService>();
             services.AddScoped<IMastersService, MastersService>();
 
-            services.AddScoped<ClientDeletedSender>();
-            services.AddScoped<ClientUpdatedSender>();
-            services.AddScoped<MasterDeletedSender>();
-            services.AddScoped<MasterUpdatedSender>();
+            services.AddScoped<ClientChangedSender>();
+            services.AddScoped<MasterChangedSender>();
         }
 
         public static void ConfigureMessageBroker(this IServiceCollection services,

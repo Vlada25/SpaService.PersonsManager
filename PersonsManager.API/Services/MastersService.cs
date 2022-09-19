@@ -11,18 +11,15 @@ namespace PersonsManager.API.Services
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
-        private readonly MasterDeletedSender _masterDeletedSender;
-        private readonly MasterUpdatedSender _masterUpdatedSender;
+        private readonly MasterChangedSender _masterChangedSender;
 
         public MastersService(IRepositoryManager repositoryManager,
             IMapper mapper,
-            MasterDeletedSender masterDeletedSender,
-            MasterUpdatedSender masterUpdatedSender)
+            MasterChangedSender masterDeletedSender)
         {
             _repositoryManager = repositoryManager;
             _mapper = mapper;
-            _masterDeletedSender = masterDeletedSender;
-            _masterUpdatedSender = masterUpdatedSender;
+            _masterChangedSender = masterDeletedSender;
         }
 
         public async Task<Master> Create(MasterForCreationDto entityForCreation)
@@ -47,7 +44,7 @@ namespace PersonsManager.API.Services
             _repositoryManager.MastersRepository.Delete(entity);
             await _repositoryManager.Save();
 
-            await _masterDeletedSender.SendMessage(entity);
+            await _masterChangedSender.SendDeletedMessage(entity);
 
             return true;
         }
@@ -64,7 +61,7 @@ namespace PersonsManager.API.Services
             _repositoryManager.MastersRepository.Delete(entity);
             await _repositoryManager.Save();
 
-            await _masterDeletedSender.SendMessage(entity);
+            await _masterChangedSender.SendDeletedMessage(entity);
 
             return true;
         }
@@ -92,7 +89,7 @@ namespace PersonsManager.API.Services
             _repositoryManager.MastersRepository.Update(entity);
             await _repositoryManager.Save();
 
-            await _masterUpdatedSender.SendMessage(entity);
+            await _masterChangedSender.SendUpdatedMessage(entity);
 
             return true;
         }
