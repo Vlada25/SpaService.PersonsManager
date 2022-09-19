@@ -88,6 +88,8 @@ namespace PersonsManager.API.Services
             }
 
             _mapper.Map(entityForUpdate, entity);
+
+            _repositoryManager.ClientsRepository.Update(entity);
             await _repositoryManager.Save();
 
             await _clientUpdatedSender.SendMessage(entity);

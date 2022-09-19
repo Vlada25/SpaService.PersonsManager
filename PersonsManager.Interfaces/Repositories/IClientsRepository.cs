@@ -9,5 +9,6 @@ namespace PersonsManager.Interfaces.Repositories
         Task<Client> GetByUserId(Guid userId);
         Task Create(Client entity);
         void Delete(Client entity);
+        void Update(Client entity);
     }
 }

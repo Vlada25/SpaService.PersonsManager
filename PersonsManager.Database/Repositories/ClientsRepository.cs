@@ -21,5 +21,8 @@ namespace PersonsManager.Database.Repositories
             await GetByCondition(c => c.Id.Equals(id), trackChanges).SingleOrDefaultAsync();
 
         public void Delete(Client entity) => DeleteEntity(entity);
+
+        public void Update(Client entity) =>
+            UpdateEntity(entity);
     }
 }
