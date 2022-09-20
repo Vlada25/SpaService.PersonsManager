@@ -24,4 +24,8 @@
     <ProjectReference Include="..\PersonsManager.Messaging\PersonsManager.Messaging.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="PersonsManager.Tests"/>
+  </ItemGroup>
+
 </Project>
