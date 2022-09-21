@@ -9,7 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Client\**" />
+    <EmbeddedResource Remove="Client\**" />
+    <None Remove="Client\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="FluentAssertions" Version="6.7.0" />
     <PackageReference Include="MassTransit" Version="8.0.6" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.9" />
@@ -30,10 +37,6 @@
     <ProjectReference Include="..\PersonsManager.API\PersonsManager.API.csproj" />
     <ProjectReference Include="..\PersonsManager.Domain\PersonsManager.Domain.csproj" />
     <ProjectReference Include="..\PersonsManager.Interfaces\PersonsManager.Interfaces.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Client\" />
   </ItemGroup>
 
 </Project>
