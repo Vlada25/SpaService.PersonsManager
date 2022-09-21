@@ -75,9 +75,9 @@ namespace PersonsManager.API.Services
         public async Task<Client> GetByUserId(Guid userId) =>
             await _repositoryManager.ClientsRepository.GetByUserId(userId);
 
-        public async Task<bool> Update(ClientForUpdateDto entityForUpdate)
+        public async Task<bool> Update(Guid id, ClientForUpdateDto entityForUpdate)
         {
-            var entity = await _repositoryManager.ClientsRepository.GetById(entityForUpdate.Id, trackChanges: true);
+            var entity = await _repositoryManager.ClientsRepository.GetById(id, trackChanges: true);
 
             if (entity == null)
             {

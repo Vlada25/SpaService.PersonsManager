@@ -11,6 +11,6 @@ namespace PersonsManager.Interfaces.Services
         Task<Master> Create(MasterForCreationDto entityForCreation);
         Task<bool> Delete(Guid id);
         Task<bool> DeleteByUserId(Guid userId);
-        Task<bool> Update(MasterForUpdateDto entityForUpdate);
+        Task<bool> Update(Guid id, MasterForUpdateDto entityForUpdate);
     }
 }

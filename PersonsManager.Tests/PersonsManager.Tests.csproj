@@ -27,8 +27,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PersonsManager.API\PersonsManager.API.csproj" />
     <ProjectReference Include="..\PersonsManager.Domain\PersonsManager.Domain.csproj" />
     <ProjectReference Include="..\PersonsManager.Interfaces\PersonsManager.Interfaces.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Client\" />
   </ItemGroup>
 
 </Project>

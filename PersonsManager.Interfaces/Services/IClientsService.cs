@@ -10,7 +10,7 @@ namespace PersonsManager.Interfaces.Services
         Task<Client> Create(ClientForCreationDto entityForCreation);
         Task<bool> Delete(Guid id);
         Task<bool> DeleteByUserId(Guid userId);
-        Task<bool> Update(ClientForUpdateDto entityForUpdate);
         Task<Client> GetByUserId(Guid userId);
+        Task<bool> Update(Guid id, ClientForUpdateDto entityForUpdate);
     }
 }

@@ -4,7 +4,7 @@ using PersonsManager.Interfaces.Services;
 
 namespace PersonsManager.API.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ClientsController : ControllerBase
     {
@@ -53,19 +53,19 @@ namespace PersonsManager.API.Controllers
             return CreatedAtRoute("ClientById", new { id = clientEntity.Id }, clientEntity);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] ClientForUpdateDto client)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] ClientForUpdateDto client)
         {
             if (client == null)
             {
                 return BadRequest("Object sent from client is null");
             }
 
-            var isEntityFound = await _clientsService.Update(client);
+            var isEntityFound = await _clientsService.Update(id, client);
 
             if (!isEntityFound)
             {
-                return NotFound($"Entity with id: {client.Id} doesn't exist in datebase");
+                return NotFound($"Entity with id: {id} doesn't exist in datebase");
             }
 
             return NoContent();
@@ -85,33 +85,5 @@ namespace PersonsManager.API.Controllers
         }
 
         #endregion
-
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetByUserId(Guid userId)
-        {
-            var client = await _clientsService.GetByUserId(userId);
-
-            if (client == null)
-            {
-                return NotFound($"Entity with userId: {userId} doesn't exist in datebase");
-            }
-            else
-            {
-                return Ok(client);
-            }
-        }
-
-        [HttpDelete("{userId}")]
-        public async Task<IActionResult> DeleteByUserId(Guid userId)
-        {
-            var isEntityFound = await _clientsService.DeleteByUserId(userId);
-
-            if (!isEntityFound)
-            {
-                return NotFound($"Entity with userId: {userId} doesn't exist in the database.");
-            }
-
-            return NoContent();
-        }
     }
 }
