@@ -1,19 +1,10 @@
-﻿using AutoMapper;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using PersonsManager.API.Controllers;
-using PersonsManager.API.Services;
-using PersonsManager.Domain;
 using PersonsManager.Domain.Models;
 using PersonsManager.DTO.Client;
-using PersonsManager.Interfaces;
 using PersonsManager.Interfaces.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace PersonsManager.Tests.Clients
