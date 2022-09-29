@@ -33,7 +33,7 @@ namespace PersonsManager.API.Extensions
                 opts.UseSqlServer(configuration.GetConnectionString("sqlConnection"), b =>
                     b.MigrationsAssembly("PersonsManager.Database")));
         }
-        public static void ConfigureRepositoryManager(this IServiceCollection services)
+        public static void ConfigureDbServices(this IServiceCollection services)
         {
             services.AddScoped<IRepositoryManager, RepositoryManager>();
 
@@ -50,9 +50,11 @@ namespace PersonsManager.API.Extensions
             services.ConfigureMessageBroker(configuration, consumersConfig => 
             { 
                 consumersConfig.AddConsumer<UserClientCreatedConsumer>();
-                consumersConfig.AddConsumer<UserClientDeletedConsumer>();
+                consumersConfig.AddConsumer<UserClientDeletedConsumer>()
+                    .Endpoint(e => e.Name = "UserClientDeleted.Persons");
                 consumersConfig.AddConsumer<UserMasterCreatedConsumer>();
-                consumersConfig.AddConsumer<UserMasterDeletedConsumer>();
+                consumersConfig.AddConsumer<UserMasterDeletedConsumer>()
+                    .Endpoint(e => e.Name = "UserMasterDeleted.Persons");
             });
         }
     }

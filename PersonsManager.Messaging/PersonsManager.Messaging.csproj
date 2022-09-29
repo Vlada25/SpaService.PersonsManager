@@ -9,6 +9,9 @@
   <ItemGroup>
     <PackageReference Include="MassTransit" Version="8.0.6" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.6" />
+    <PackageReference Include="Microsoft.Azure.ServiceBus" Version="5.2.0" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Core" Version="3.0.23" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="4.3.0" />
     <PackageReference Include="SpaService.Domain" Version="1.0.8" />
   </ItemGroup>
 
