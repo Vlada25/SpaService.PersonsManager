@@ -32,12 +32,10 @@ namespace PersonsManager.API.Controllers
 
             if (master == null)
             {
-                throw new Exception($"Entity with id: {id} doesn't exist in database");
+                return NotFound($"Entity with id: {id} doesn't exist in database");
             }
-            else
-            {
-                return Ok(master);
-            }
+
+            return Ok(master);
         }
 
         [HttpPost]
@@ -65,7 +63,7 @@ namespace PersonsManager.API.Controllers
 
             if (!isEntityFound)
             {
-                throw new Exception($"Entity with id: {id} doesn't exist in database");
+                return NotFound($"Entity with id: {id} doesn't exist in database");
             }
 
             return NoContent();
@@ -78,7 +76,7 @@ namespace PersonsManager.API.Controllers
 
             if (!isEntityFound)
             {
-                throw new Exception($"Entity with id: {id} doesn't exist in database");
+                return NotFound($"Entity with id: {id} doesn't exist in database");
             }
 
             return NoContent();

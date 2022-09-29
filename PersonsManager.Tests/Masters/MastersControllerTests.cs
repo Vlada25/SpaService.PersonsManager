@@ -68,6 +68,14 @@ namespace PersonsManager.Tests.Masters
             var models = result.Value as IEnumerable<Master>;
 
             Assert.Equal(_testMasters, models);
+            Assert.Equal(_testMasters.Count, models.Count());
+            for (int i = 0; i < _testMasters.Count; i++)
+            {
+                Assert.Equal(_testMasters[i].Id, models.ElementAt(i).Id);
+                Assert.Equal(_testMasters[i].Surname, models.ElementAt(i).Surname);
+                Assert.Equal(_testMasters[i].Name, models.ElementAt(i).Name);
+                Assert.Equal(_testMasters[i].MiddleName, models.ElementAt(i).MiddleName);
+            }
         }
 
         [Fact]
@@ -90,6 +98,7 @@ namespace PersonsManager.Tests.Masters
             var models = result.Value as IEnumerable<Master>;
 
             Assert.Empty(models);
+            Assert.Equal(models.Count(), 0);
         }
 
         [Fact]
@@ -113,18 +122,22 @@ namespace PersonsManager.Tests.Masters
 
             var model = result.Value as Master;
 
-            Assert.Equal(master, model);
+            Assert.Equal(master.Id, model.Id);
+            Assert.Equal(master.Surname, model.Surname);
+            Assert.Equal(master.Name, model.Name);
+            Assert.Equal(master.MiddleName, model.MiddleName);
         }
 
         [Fact]
-        public async Task GetById_MasterDoesntExist_CatchsException()
+        public async Task GetById_MasterDoesntExist_ThrowsException()
         {
             // Arrange
             Guid masterId = Guid.NewGuid();
             var message = $"Entity with id: {masterId} doesn't exist in database";
 
             _masterServiceMock.Setup(s => s.GetById(masterId))
-                .ReturnsAsync((Master)null);
+                .ThrowsAsync(new Exception(message));
+
             var controller = new MastersController(_masterServiceMock.Object);
 
             // Act
@@ -137,7 +150,7 @@ namespace PersonsManager.Tests.Masters
         }
 
         [Fact]
-        public async Task Create_MasterDoesntExist_ReturnsMasterAndStatusCode201()
+        public async Task Create_MasterValid_ReturnsMasterAndStatusCode201()
         {
             // Arrange
             MasterForCreationDto masterForCreation = new MasterForCreationDto
@@ -151,12 +164,9 @@ namespace PersonsManager.Tests.Masters
             var controller = new MastersController(_masterServiceMock.Object);
 
             // Act
-
             var response = await controller.Create(masterForCreation);
 
-
             // Assert
-
             Assert.IsType<CreatedAtRouteResult>(response);
 
             var result = response as CreatedAtRouteResult;
@@ -167,6 +177,19 @@ namespace PersonsManager.Tests.Masters
 
             Assert.Equal(model.Name, masterForCreation.Name);
             Assert.Equal(model.Surname, masterForCreation.Surname);
+        }
+
+        [Fact]
+        public async Task Create_MasterInvalid_ReturnsStatusCode400()
+        {
+            // Arrange
+            var controller = new MastersController(_masterServiceMock.Object);
+
+            // Act
+            var response = await controller.Create(null);
+
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(response);
         }
 
         [Fact]
@@ -193,7 +216,7 @@ namespace PersonsManager.Tests.Masters
         }
 
         [Fact]
-        public async Task Update_MasterExists_CatchsException()
+        public async Task Update_MasterDoesntExist_ThrowsException()
         {
             // Arrange
             Guid masterId = Guid.NewGuid();
@@ -205,8 +228,8 @@ namespace PersonsManager.Tests.Masters
                 Surname = "Kiselev"
             };
 
-            _masterServiceMock.Setup(s => s.Update(masterId, null))
-                .ReturnsAsync(false);
+            _masterServiceMock.Setup(s => s.Update(masterId, masterForUpdate))
+                .ThrowsAsync(new Exception(message));
             var controller = new MastersController(_masterServiceMock.Object);
 
             // Act
@@ -236,14 +259,14 @@ namespace PersonsManager.Tests.Masters
         }
 
         [Fact]
-        public async Task Delete_MasterExists_CatchsException()
+        public async Task Delete_MasterExists_ThrowsException()
         {
             // Arrange
             Guid masterId = Guid.NewGuid();
             var message = $"Entity with id: {masterId} doesn't exist in database";
 
             _masterServiceMock.Setup(s => s.Delete(masterId))
-                .ReturnsAsync(false);
+                .ThrowsAsync(new Exception(message));
             var controller = new MastersController(_masterServiceMock.Object);
 
             // Act

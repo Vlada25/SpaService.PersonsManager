@@ -137,7 +137,7 @@ namespace PersonsManager.Tests.Clients
         }
 
         [Fact]
-        public async Task Create_ClientDoesntExist_ReturnsClientAndStatusCode201()
+        public async Task Create_ClientValid_ReturnsClientAndStatusCode201()
         {
             // Arrange
             ClientForCreationDto clientForCreation = new ClientForCreationDto
@@ -151,12 +151,9 @@ namespace PersonsManager.Tests.Clients
             var controller = new ClientsController(_clientServiceMock.Object);
 
             // Act
-
             var response = await controller.Create(clientForCreation);
 
-
             // Assert
-
             response.Should().BeOfType<CreatedAtRouteResult>();
 
             var result = response as CreatedAtRouteResult;
@@ -166,6 +163,19 @@ namespace PersonsManager.Tests.Clients
             var model = result.Value as Client;
 
             model.Should().BeEquivalentTo(clientForCreation);
+        }
+
+        [Fact]
+        public async Task Create_ClientInvalid_ReturnsStatusCode400()
+        {
+            // Arrange
+            var controller = new ClientsController(_clientServiceMock.Object);
+
+            // Act
+            var response = await controller.Create(null);
+
+            // Assert
+            response.Should().BeOfType<BadRequestObjectResult>();
         }
 
         [Fact]
@@ -192,6 +202,46 @@ namespace PersonsManager.Tests.Clients
         }
 
         [Fact]
+        public async Task Update_ClientDoesntExist_ReturnsStatusCode404()
+        {
+            // Arrange
+            Guid clientId = Guid.NewGuid();
+
+            ClientForUpdateDto clientForUpdate = new ClientForUpdateDto
+            {
+                Name = "Danila",
+                Surname = "Kiselev"
+            };
+
+            _clientServiceMock.Setup(s => s.Update(clientId, null))
+                .ReturnsAsync(false);
+            var controller = new ClientsController(_clientServiceMock.Object);
+
+            // Act
+            var response = await controller.Update(clientId, clientForUpdate);
+
+            // Assert
+            response.Should().BeOfType<NotFoundObjectResult>();
+        }
+
+        [Fact]
+        public async Task Update_ClientInvalid_ReturnsStatusCode400()
+        {
+            // Arrange
+            Guid clientId = Guid.NewGuid();
+
+            _clientServiceMock.Setup(s => s.Update(clientId, null))
+                .ReturnsAsync(false);
+            var controller = new ClientsController(_clientServiceMock.Object);
+
+            // Act
+            var response = await controller.Update(clientId, null);
+
+            // Assert
+            response.Should().BeOfType<BadRequestObjectResult>();
+        }
+
+        [Fact]
         public async Task Delete_ClientExists_ReturnsStatusCode204()
         {
             // Arrange
@@ -206,6 +256,23 @@ namespace PersonsManager.Tests.Clients
 
             // Assert
             response.Should().BeOfType<NoContentResult>();
+        }
+
+        [Fact]
+        public async Task Delete_ClientDoesntExist_ReturnsStatusCode404()
+        {
+            // Arrange
+            Guid clientId = Guid.NewGuid();
+
+            _clientServiceMock.Setup(s => s.Delete(clientId))
+                .ReturnsAsync(false);
+            var controller = new ClientsController(_clientServiceMock.Object);
+
+            // Act
+            var response = await controller.Delete(clientId);
+
+            // Assert
+            response.Should().BeOfType<NotFoundObjectResult>();
         }
     }
 }
