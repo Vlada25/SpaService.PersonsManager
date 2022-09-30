@@ -1,10 +1,6 @@
-﻿using PersonsManager.Domain.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PersonsManager.Domain.Models;
 using PersonsManager.Interfaces.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PersonsManager.Database.Repositories
 {
@@ -13,17 +9,20 @@ namespace PersonsManager.Database.Repositories
         public ClientsRepository(PersonsManagerDbContext dbContext)
             : base(dbContext) { }
 
-        public void Create(Client entity) => CreateEntity(entity);
+        public async Task Create(Client entity) => await CreateEntity(entity);
 
-        public IEnumerable<Client> GetAll(bool trackChanges) =>
-            GetAllEntities(trackChanges);
+        public async Task<IEnumerable<Client>> GetAll(bool trackChanges) =>
+            await GetAllEntities(trackChanges).ToListAsync();
 
-        public Client GetByUserId(Guid userId) =>
-            GetByCondition(c => c.UserId.Equals(userId), false).SingleOrDefault();
+        public async Task<Client> GetByUserId(Guid userId) =>
+            await GetByCondition(c => c.UserId.Equals(userId), false).SingleOrDefaultAsync();
 
-        public Client GetById(Guid id, bool trackChanges) =>
-            GetByCondition(c => c.Id.Equals(id), trackChanges).SingleOrDefault();
+        public async Task<Client> GetById(Guid id, bool trackChanges) =>
+            await GetByCondition(c => c.Id.Equals(id), trackChanges).SingleOrDefaultAsync();
 
         public void Delete(Client entity) => DeleteEntity(entity);
+
+        public void Update(Client entity) =>
+            UpdateEntity(entity);
     }
 }

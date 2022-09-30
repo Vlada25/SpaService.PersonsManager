@@ -1,11 +1,6 @@
 ﻿using PersonsManager.Database.Repositories;
 using PersonsManager.Interfaces;
 using PersonsManager.Interfaces.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PersonsManager.Database
 {
@@ -45,6 +40,6 @@ namespace PersonsManager.Database
             }
         }
 
-        public void Save() => _dbContext.SaveChanges();
+        public async Task Save() => await _dbContext.SaveChangesAsync();
     }
 }

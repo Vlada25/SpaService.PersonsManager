@@ -3,6 +3,7 @@ using PersonsManager.Domain.Models;
 using PersonsManager.DTO.Client;
 using PersonsManager.Interfaces;
 using PersonsManager.Interfaces.Services;
+using PersonsManager.Messaging.Senders;
 
 namespace PersonsManager.API.Services
 {
@@ -10,27 +11,30 @@ namespace PersonsManager.API.Services
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
+        private readonly ClientChangedSender _clientChangedSender;
 
         public ClientsService(IRepositoryManager repositoryManager,
-            IMapper mapper)
+            IMapper mapper,
+            ClientChangedSender clientDeletedSender)
         {
             _repositoryManager = repositoryManager;
             _mapper = mapper;
+            _clientChangedSender = clientDeletedSender;
         }
 
-        public Client Create(ClientForCreationDto entityForCreation)
+        public async Task<Client> Create(ClientForCreationDto entityForCreation)
         {
             var entity = _mapper.Map<Client>(entityForCreation);
 
-            _repositoryManager.ClientsRepository.Create(entity);
-            _repositoryManager.Save();
+            await _repositoryManager.ClientsRepository.Create(entity);
+            await _repositoryManager.Save();
 
             return entity;
         }
 
-        public bool Delete(Guid id)
+        public async Task<bool> Delete(Guid id)
         {
-            var entity = _repositoryManager.ClientsRepository.GetById(id, trackChanges: false);
+            var entity = await _repositoryManager.ClientsRepository.GetById(id, trackChanges: false);
 
             if (entity == null)
             {
@@ -38,23 +42,42 @@ namespace PersonsManager.API.Services
             }
 
             _repositoryManager.ClientsRepository.Delete(entity);
-            _repositoryManager.Save();
+            await _repositoryManager.Save();
+
+            await _clientChangedSender.SendDeletedMessage(entity);
 
             return true;
         }
 
-        public IEnumerable<Client> GetAll() =>
-            _repositoryManager.ClientsRepository.GetAll(trackChanges: false);
-
-        public Client GetById(Guid id) =>
-            _repositoryManager.ClientsRepository.GetById(id, trackChanges: false);
-
-        public Client GetByUserId(Guid userId) =>
-            _repositoryManager.ClientsRepository.GetByUserId(userId);
-
-        public bool Update(ClientForUpdateDto entityForUpdate)
+        public async Task<bool> DeleteByUserId(Guid userId)
         {
-            var entity = _repositoryManager.ClientsRepository.GetById(entityForUpdate.Id, trackChanges: true);
+            var entity = await _repositoryManager.ClientsRepository.GetByUserId(userId);
+
+            if (entity == null)
+            {
+                return false;
+            }
+
+            _repositoryManager.ClientsRepository.Delete(entity);
+            await _repositoryManager.Save();
+
+            await _clientChangedSender.SendDeletedMessage(entity);
+
+            return true;
+        }
+
+        public async Task<IEnumerable<Client>> GetAll() =>
+            await _repositoryManager.ClientsRepository.GetAll(trackChanges: false);
+
+        public async Task<Client> GetById(Guid id) =>
+            await _repositoryManager.ClientsRepository.GetById(id, trackChanges: false);
+
+        public async Task<Client> GetByUserId(Guid userId) =>
+            await _repositoryManager.ClientsRepository.GetByUserId(userId);
+
+        public async Task<bool> Update(Guid id, ClientForUpdateDto entityForUpdate)
+        {
+            var entity = await _repositoryManager.ClientsRepository.GetById(id, trackChanges: true);
 
             if (entity == null)
             {
@@ -62,7 +85,11 @@ namespace PersonsManager.API.Services
             }
 
             _mapper.Map(entityForUpdate, entity);
-            _repositoryManager.Save();
+
+            _repositoryManager.ClientsRepository.Update(entity);
+            await _repositoryManager.Save();
+
+            await _clientChangedSender.SendUpdatedMessage(entity);
 
             return true;
         }

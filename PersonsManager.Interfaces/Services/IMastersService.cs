@@ -1,19 +1,16 @@
 ﻿using PersonsManager.Domain.Models;
 using PersonsManager.DTO.Master;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PersonsManager.Interfaces.Services
 {
     public interface IMastersService
     {
-        IEnumerable<Master> GetAll();
-        Master GetById(Guid id);
-        Master Create(MasterForCreationDto entityForCreation);
-        bool Delete(Guid id);
-        bool Update(MasterForUpdateDto entityForUpdate);
+        Task<IEnumerable<Master>> GetAll();
+        Task<Master> GetById(Guid id);
+        Task<Master> GetByUserId(Guid userId);
+        Task<Master> Create(MasterForCreationDto entityForCreation);
+        Task<bool> Delete(Guid id);
+        Task<bool> DeleteByUserId(Guid userId);
+        Task<bool> Update(Guid id, MasterForUpdateDto entityForUpdate);
     }
 }

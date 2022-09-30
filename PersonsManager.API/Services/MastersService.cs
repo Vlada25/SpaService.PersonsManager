@@ -3,6 +3,7 @@ using PersonsManager.Domain.Models;
 using PersonsManager.DTO.Master;
 using PersonsManager.Interfaces;
 using PersonsManager.Interfaces.Services;
+using PersonsManager.Messaging.Senders;
 
 namespace PersonsManager.API.Services
 {
@@ -10,27 +11,30 @@ namespace PersonsManager.API.Services
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
+        private readonly MasterChangedSender _masterChangedSender;
 
         public MastersService(IRepositoryManager repositoryManager,
-            IMapper mapper)
+            IMapper mapper,
+            MasterChangedSender masterDeletedSender)
         {
             _repositoryManager = repositoryManager;
             _mapper = mapper;
+            _masterChangedSender = masterDeletedSender;
         }
 
-        public Master Create(MasterForCreationDto entityForCreation)
+        public async Task<Master> Create(MasterForCreationDto entityForCreation)
         {
             var entity = _mapper.Map<Master>(entityForCreation);
 
-            _repositoryManager.MastersRepository.Create(entity);
-            _repositoryManager.Save();
+            await _repositoryManager.MastersRepository.Create(entity);
+            await _repositoryManager.Save();
 
             return entity;
         }
 
-        public bool Delete(Guid id)
+        public async Task<bool> Delete(Guid id)
         {
-            var entity = _repositoryManager.MastersRepository.GetById(id, trackChanges: false);
+            var entity = await _repositoryManager.MastersRepository.GetById(id, trackChanges: false);
 
             if (entity == null)
             {
@@ -38,20 +42,42 @@ namespace PersonsManager.API.Services
             }
 
             _repositoryManager.MastersRepository.Delete(entity);
-            _repositoryManager.Save();
+            await _repositoryManager.Save();
+
+            await _masterChangedSender.SendDeletedMessage(entity);
 
             return true;
         }
 
-        public IEnumerable<Master> GetAll() =>
-            _repositoryManager.MastersRepository.GetAll(trackChanges: false);
-
-        public Master GetById(Guid id) =>
-            _repositoryManager.MastersRepository.GetById(id, trackChanges: false);
-
-        public bool Update(MasterForUpdateDto entityForUpdate)
+        public async Task<bool> DeleteByUserId(Guid userId)
         {
-            var entity = _repositoryManager.MastersRepository.GetById(entityForUpdate.Id, trackChanges: true);
+            var entity = await _repositoryManager.MastersRepository.GetByUserId(userId);
+
+            if (entity == null)
+            {
+                return false;
+            }
+
+            _repositoryManager.MastersRepository.Delete(entity);
+            await _repositoryManager.Save();
+
+            await _masterChangedSender.SendDeletedMessage(entity);
+
+            return true;
+        }
+
+        public async Task<IEnumerable<Master>> GetAll() =>
+            await _repositoryManager.MastersRepository.GetAll(trackChanges: false);
+
+        public async Task<Master> GetById(Guid id) =>
+            await _repositoryManager.MastersRepository.GetById(id, trackChanges: false);
+
+        public async Task<Master> GetByUserId(Guid userId) =>
+            await _repositoryManager.MastersRepository.GetByUserId(userId);
+
+        public async Task<bool> Update(Guid id, MasterForUpdateDto entityForUpdate)
+        {
+            var entity = await _repositoryManager.MastersRepository.GetById(id, trackChanges: true);
 
             if (entity == null)
             {
@@ -59,7 +85,11 @@ namespace PersonsManager.API.Services
             }
 
             _mapper.Map(entityForUpdate, entity);
-            _repositoryManager.Save();
+
+            _repositoryManager.MastersRepository.Update(entity);
+            await _repositoryManager.Save();
+
+            await _masterChangedSender.SendUpdatedMessage(entity);
 
             return true;
         }

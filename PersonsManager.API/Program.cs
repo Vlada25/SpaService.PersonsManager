@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.ConfigureRepositoryManager();
+builder.Services.ConfigureDbServices();
 
 builder.WebHost.ConfigureKestrel(options =>
 {
@@ -20,6 +20,8 @@ builder.Services.AddControllers(config =>
     config.RespectBrowserAcceptHeader = true;
     config.ReturnHttpNotAcceptable = true;
 }).AddNewtonsoftJson();
+
+builder.Services.ConfigureMessageBroker(builder.Configuration);
 
 builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
@@ -71,3 +73,6 @@ app.UseEndpoints(endpoints =>
 });
 
 app.Run();
+
+
+public partial class Program { }

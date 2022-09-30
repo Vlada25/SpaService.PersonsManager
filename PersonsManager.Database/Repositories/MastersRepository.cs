@@ -1,10 +1,6 @@
-﻿using PersonsManager.Domain.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PersonsManager.Domain.Models;
 using PersonsManager.Interfaces.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PersonsManager.Database.Repositories
 {
@@ -13,14 +9,20 @@ namespace PersonsManager.Database.Repositories
         public MastersRepository(PersonsManagerDbContext dbContext)
             : base(dbContext) { }
 
-        public void Create(Master entity) => CreateEntity(entity);
+        public async Task Create(Master entity) => await CreateEntity(entity);
 
-        public IEnumerable<Master> GetAll(bool trackChanges) =>
-            GetAllEntities(trackChanges);
+        public async Task<IEnumerable<Master>> GetAll(bool trackChanges) =>
+            await GetAllEntities(trackChanges).ToListAsync();
 
-        public Master GetById(Guid id, bool trackChanges) =>
-            GetByCondition(fm => fm.Id.Equals(id), trackChanges).SingleOrDefault();
+        public async Task<Master> GetById(Guid id, bool trackChanges) =>
+            await GetByCondition(fm => fm.Id.Equals(id), trackChanges).SingleOrDefaultAsync();
+
+        public async Task<Master> GetByUserId(Guid userId) =>
+            await GetByCondition(c => c.UserId.Equals(userId), false).SingleOrDefaultAsync();
 
         public void Delete(Master entity) => DeleteEntity(entity);
+
+        public void Update(Master entity) =>
+            UpdateEntity(entity);
     }
 }

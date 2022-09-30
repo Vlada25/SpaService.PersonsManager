@@ -1,17 +1,14 @@
 ﻿using PersonsManager.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PersonsManager.Interfaces.Repositories
 {
     public interface IMastersRepository
     {
-        IEnumerable<Master> GetAll(bool trackChanges);
-        Master GetById(Guid id, bool trackChanges);
-        void Create(Master entity);
+        Task<IEnumerable<Master>> GetAll(bool trackChanges);
+        Task<Master> GetById(Guid id, bool trackChanges);
+        Task<Master> GetByUserId(Guid userId);
+        Task Create(Master entity);
         void Delete(Master entity);
+        void Update(Master entity);
     }
 }
