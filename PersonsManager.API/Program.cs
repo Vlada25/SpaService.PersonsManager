@@ -5,7 +5,17 @@ using PersonsManager.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+if (args.Length != 0)
+{
+    int firstIp = int.Parse($"5{args[0]}");
+    int secondIp = int.Parse($"7{args[0]}");
+
+    builder.WebHost.ConfigureKestrel(options =>
+    {
+        options.ListenAnyIP(firstIp);
+        options.ListenAnyIP(secondIp, configure => configure.UseHttps());
+    });
+}
 
 builder.Services.ConfigureDbServices();
 

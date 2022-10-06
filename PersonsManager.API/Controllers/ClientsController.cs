@@ -85,5 +85,18 @@ namespace PersonsManager.API.Controllers
         }
 
         #endregion
+
+        [HttpGet("Users/{userId}")]
+        public async Task<IActionResult> GetByUserId(Guid userId)
+        {
+            var client = await _clientsService.GetByUserId(userId);
+
+            if (client == null)
+            {
+                return NotFound($"Entity with userId: {userId} doesn't exist in datebase");
+            }
+
+            return Ok(client);
+        }
     }
 }
