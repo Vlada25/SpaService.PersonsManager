@@ -5,6 +5,7 @@ namespace PersonsManager.Interfaces.Repositories
     public interface IMastersRepository
     {
         Task<IEnumerable<Master>> GetAll(bool trackChanges);
+        Task<IEnumerable<Master>> GetByAddressId(Guid addressId, bool trackChanges);
         Task<Master> GetById(Guid id, bool trackChanges);
         Task<Master> GetByUserId(Guid userId);
         Task Create(Master entity);

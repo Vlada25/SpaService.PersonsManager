@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="MassTransit" Version="8.0.6" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.6" />
-    <PackageReference Include="SpaService.Domain" Version="1.0.8" />
+    <PackageReference Include="SpaService.Domain" Version="1.0.10" />
   </ItemGroup>
 
   <ItemGroup>

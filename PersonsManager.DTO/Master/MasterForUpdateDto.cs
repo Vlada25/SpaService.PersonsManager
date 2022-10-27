@@ -6,6 +6,7 @@
         public string Name { get; set; }
         public string MiddleName { get; set; }
         public string PhoneNumber { get; set; }
+        public Guid AddressId { get; set; }
         public int Rating { get; set; }
     }
 }

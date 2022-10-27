@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PersonsManager.Database;
 
@@ -11,9 +12,10 @@ using PersonsManager.Database;
 namespace PersonsManager.Database.Migrations
 {
     [DbContext(typeof(PersonsManagerDbContext))]
-    partial class PersonsManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221014122812_AddAddressId")]
+    partial class AddAddressId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,8 +77,8 @@ namespace PersonsManager.Database.Migrations
                     b.Property<Guid>("AddressId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("Rating")
-                        .HasColumnType("float");
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("Master");
                 });

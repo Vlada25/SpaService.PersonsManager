@@ -5,6 +5,7 @@ using PersonsManager.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 if (args.Length != 0)
 {
     int firstIp = int.Parse($"5{args[0]}");
@@ -18,12 +19,6 @@ if (args.Length != 0)
 }
 
 builder.Services.ConfigureDbServices();
-
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.ListenAnyIP(5051);
-    options.ListenAnyIP(7051, configure => configure.UseHttps());
-});
 
 builder.Services.AddControllers(config =>
 {

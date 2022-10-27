@@ -2,6 +2,7 @@
 {
     public class Master : Person
     {
-        public int Rating { get; set; }
+        public double Rating { get; set; }
+        public Guid AddressId { get; set; }
     }
 }

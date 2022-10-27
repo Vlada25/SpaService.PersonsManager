@@ -29,6 +29,7 @@ namespace PersonsManager.Messaging.Consumers
                 Name = message.Name,
                 MiddleName = message.MiddleName,
                 PhoneNumber = "",
+                AddressId = message.AddressId,
                 UserId = message.Id
             });
         }

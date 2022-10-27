@@ -44,7 +44,7 @@ namespace PersonsManager.API.Services
             _repositoryManager.ClientsRepository.Delete(entity);
             await _repositoryManager.Save();
 
-            await _clientChangedSender.SendDeletedMessage(entity);
+            //await _clientChangedSender.SendDeletedMessage(entity);
 
             return true;
         }

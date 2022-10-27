@@ -44,7 +44,7 @@ namespace PersonsManager.API.Services
             _repositoryManager.MastersRepository.Delete(entity);
             await _repositoryManager.Save();
 
-            await _masterChangedSender.SendDeletedMessage(entity);
+            //await _masterChangedSender.SendDeletedMessage(entity);
 
             return true;
         }
@@ -68,6 +68,9 @@ namespace PersonsManager.API.Services
 
         public async Task<IEnumerable<Master>> GetAll() =>
             await _repositoryManager.MastersRepository.GetAll(trackChanges: false);
+
+        public async Task<IEnumerable<Master>> GetByAddressId(Guid addressId) =>
+            await _repositoryManager.MastersRepository.GetByAddressId(addressId, trackChanges: false);
 
         public async Task<Master> GetById(Guid id) =>
             await _repositoryManager.MastersRepository.GetById(id, trackChanges: false);
